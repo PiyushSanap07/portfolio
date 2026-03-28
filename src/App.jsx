@@ -77,10 +77,11 @@ function FullPage() {
 }
 
 export default function App() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [showPreloader, setShowPreloader] = useState(true);
+  const [appMounted, setAppMounted] = useState(false);
 
   useEffect(() => {
-    if (isLoading) return;
+    if (!appMounted) return;
 
     // Initialize Lenis smooth scroll
     const lenis = new Lenis({
@@ -102,14 +103,14 @@ export default function App() {
       lenis.destroy();
       delete window.lenis;
     };
-  }, [isLoading]);
+  }, [appMounted]);
 
   return (
     <Router>
       <div className="font-sans bg-bg text-black min-h-screen selection:bg-[#FFC83D] selection:text-black">
-        {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
+        {showPreloader && <Preloader onStartExit={() => setAppMounted(true)} onComplete={() => setShowPreloader(false)} />}
         
-        {!isLoading && (
+        {appMounted && (
           <>
             <CustomCursor />
             <ScrollProgress />

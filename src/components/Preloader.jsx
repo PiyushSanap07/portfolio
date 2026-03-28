@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 
-export default function Preloader({ onComplete }) {
+export default function Preloader({ onComplete, onStartExit }) {
   const containerRef = useRef(null);
   const textRef = useRef(null);
   const progressRef = useRef(null);
@@ -9,7 +9,8 @@ export default function Preloader({ onComplete }) {
   useEffect(() => {
     const tl = gsap.timeline({
       onComplete: () => {
-        gsap.to(containerRef.current, { yPercent: -100, duration: 0.6, ease: 'power3.inOut', onComplete });
+        if (onStartExit) onStartExit();
+        gsap.to(containerRef.current, { yPercent: -100, duration: 0.8, ease: 'power3.inOut', onComplete });
       },
     });
     tl.to(progressRef.current, { scaleX: 1, duration: 1.2, ease: 'power2.inOut' });
